@@ -1,49 +1,76 @@
-const text = [
-    "B.Com Student",
-    "Computer Trainer",
-    "Magazine Creator",
-    "Book Designer",
-    "Future Court Stenographer"
+const words = [
+"First-Year B.Com Student",
+"Computer Trainer",
+"Magazine Creator",
+"Book Designer",
+"Future Court Stenographer"
 ];
 
-let count = 0;
-let index = 0;
-let currentText = "";
-let letter = "";
+let wordIndex = 0;
+let charIndex = 0;
 
-(function type(){
+const typingElement = document.getElementById("typing");
 
-    if(count === text.length){
-        count = 0;
-    }
+function typeEffect(){
 
-    currentText = text[count];
-    letter = currentText.slice(0, ++index);
+if(charIndex < words[wordIndex].length){
 
-    document.getElementById("typing").textContent = letter;
+typingElement.textContent += words[wordIndex].charAt(charIndex);
 
-    if(letter.length === currentText.length){
-        count++;
-        index = 0;
-        setTimeout(type, 1500);
-    }else{
-        setTimeout(type, 100);
-    }
+charIndex++;
 
-})();
+setTimeout(typeEffect,100);
 
-window.addEventListener("scroll", () => {
+}else{
 
-    const reveals = document.querySelectorAll(".reveal");
+setTimeout(eraseEffect,1500);
 
-    reveals.forEach(section => {
+}
 
-        const windowHeight = window.innerHeight;
-        const top = section.getBoundingClientRect().top;
+}
 
-        if(top < windowHeight - 100){
-            section.classList.add("active");
-        }
-    });
+function eraseEffect(){
+
+if(charIndex > 0){
+
+typingElement.textContent =
+words[wordIndex].substring(0,charIndex-1);
+
+charIndex--;
+
+setTimeout(eraseEffect,50);
+
+}else{
+
+wordIndex++;
+
+if(wordIndex >= words.length){
+wordIndex = 0;
+}
+
+setTimeout(typeEffect,300);
+
+}
+
+}
+
+document.addEventListener("DOMContentLoaded",function(){
+typeEffect();
+});
+
+window.addEventListener("scroll",()=>{
+
+const reveals=document.querySelectorAll(".reveal");
+
+reveals.forEach((element)=>{
+
+const windowHeight=window.innerHeight;
+const revealTop=element.getBoundingClientRect().top;
+
+if(revealTop < windowHeight - 100){
+element.classList.add("active");
+}
+
+});
 
 });
